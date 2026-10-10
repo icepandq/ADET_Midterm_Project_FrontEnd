@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, ActivityIndicator, ImageBackground, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import Animated, { FadeInDown, Layout } from 'react-native-reanimated';
 import { api } from '../api/api';
 
 interface FeaturedItem { id: number; name: string; description: string; price: number; category: string; available: boolean; }
@@ -26,6 +27,7 @@ export default function HomeScreen() {
         <View style={{ flex: 1 }}><Text style={s.brand}>BREW & CO.</Text><Text style={s.brandSub}>YOUR DAILY RITUAL</Text></View>
         <TouchableOpacity style={s.avatar} onPress={() => router.push('/orders')}><Ionicons name="person-outline" size={21} color="#493326" /></TouchableOpacity>
       </View>
+      <Animated.View entering={FadeInDown.springify()}>
       <ImageBackground source={{ uri: coffeePhoto }} imageStyle={s.heroImage} style={s.hero}>
         <View style={s.heroShade} />
         <View style={s.heroContent}>
@@ -37,17 +39,20 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
       </ImageBackground>
+      </Animated.View>
 
       <View style={s.sectionHeader}><View><Text style={s.kicker}>MADE FOR YOU</Text><Text style={s.sectionTitle}>Today’s special</Text></View><View style={s.starBadge}><Ionicons name="sparkles" size={15} color="#9A6C3E" /><Text style={s.starText}>BARISTA PICK</Text></View></View>
-      {loading ? <View style={s.loadingCard}><ActivityIndicator color="#865B3D" /><Text style={s.muted}>Finding today's favorite…</Text></View> : featured ? <View style={s.specialCard}>
+      {loading ? <View style={s.loadingCard}><ActivityIndicator color="#865B3D" /><Text style={s.muted}>Finding today's favorite…</Text></View> : featured ? <Animated.View entering={FadeInDown.delay(100).springify()} style={s.specialCard}>
         <View style={s.specialIcon}><Ionicons name="cafe" size={30} color="#F8EBDD" /></View>
         <View style={s.specialInfo}><Text style={s.specialCategory}>{featured.category || 'HOUSE FAVORITE'}</Text><Text style={s.specialName}>{featured.name}</Text><Text style={s.specialDesc} numberOfLines={2}>{featured.description}</Text><View style={s.specialBottom}><Text style={s.price}>₱{Number(featured.price).toFixed(2)}</Text><View style={s.available}><View style={[s.statusDot, { backgroundColor: featured.available ? '#6BA27C' : '#C96C5D' }]} /><Text style={s.availableText}>{featured.available ? 'Available now' : 'Currently unavailable'}</Text></View></View></View>
-      </View> : <View style={s.emptyCard}><Ionicons name="cafe-outline" size={24} color="#9A806B" /><Text style={s.muted}>Today's special will appear here soon.</Text></View>}
+      </Animated.View> : <View style={s.emptyCard}><Ionicons name="cafe-outline" size={24} color="#9A806B" /><Text style={s.muted}>Today's special will appear here soon.</Text></View>}
 
       <View style={s.sectionHeader}><View><Text style={s.kicker}>TAKE A LOOK AROUND</Text><Text style={s.sectionTitle}>Explore Brew & Co.</Text></View><Text style={s.count}>04 COLLECTIONS</Text></View>
-      <View style={s.grid}>{quickLinks.map((item, i) => <TouchableOpacity key={item.title} style={s.linkCard} onPress={() => router.push(item.route)} activeOpacity={0.78}>
-        <View style={[s.linkIcon, { backgroundColor: item.color }]}><Ionicons name={item.icon} size={24} color="#4A3324" /></View><View style={s.linkText}><Text style={s.linkTitle}>{item.title}</Text><Text style={s.linkSubtitle}>{item.subtitle}</Text></View><Ionicons name="arrow-forward-circle-outline" size={23} color="#A58B76" />
-      </TouchableOpacity>)}</View>
+      <View style={s.grid}>{quickLinks.map((item, i) => <Animated.View key={item.title} entering={FadeInDown.delay(150 + i * 65).springify()} layout={Layout.springify()}>
+        <TouchableOpacity style={s.linkCard} onPress={() => router.push(item.route)} activeOpacity={0.78}>
+          <View style={[s.linkIcon, { backgroundColor: item.color }]}><Ionicons name={item.icon} size={24} color="#4A3324" /></View><View style={s.linkText}><Text style={s.linkTitle}>{item.title}</Text><Text style={s.linkSubtitle}>{item.subtitle}</Text></View><Ionicons name="arrow-forward-circle-outline" size={23} color="#A58B76" />
+        </TouchableOpacity>
+      </Animated.View>)}</View>
       <View style={s.footer}><View style={s.footerLine} /><Text style={s.footerText}>GOOD COFFEE. GOOD COMPANY.</Text><View style={s.footerLine} /></View>
     </ScrollView>
   </SafeAreaView>;

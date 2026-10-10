@@ -1,180 +1,142 @@
-// import { Image } from 'expo-image';
-// import { SymbolView } from 'expo-symbols';
-// import { Platform, Pressable, ScrollView, StyleSheet } from 'react-native';
-// import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React from 'react';
+import { ScrollView, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import Animated, { FadeInDown, Layout } from 'react-native-reanimated';
 
-// import { ExternalLink } from '@/components/external-link';
-// import { ThemedText } from '@/components/themed-text';
-// import { ThemedView } from '@/components/themed-view';
-// import { Collapsible } from '@/components/ui/collapsible';
-// import { WebBadge } from '@/components/web-badge';
-// import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-// import { useTheme } from '@/hooks/use-theme';
+const destinations = [
+  {
+    title: 'Find your next favorite',
+    subtitle: 'Handcrafted drinks for every kind of day.',
+    label: 'THE MENU',
+    icon: 'cafe-outline' as const,
+    color: '#EFE2D3',
+    route: '/menu' as const,
+  },
+  {
+    title: 'Meet the coffee',
+    subtitle: 'Get to know our origins and tasting notes.',
+    label: 'OUR BEANS',
+    icon: 'leaf-outline' as const,
+    color: '#E5EADF',
+    route: '/beans' as const,
+  },
+  {
+    title: 'The hands behind the cup',
+    subtitle: 'Meet the people who make every visit special.',
+    label: 'OUR TEAM',
+    icon: 'people-outline' as const,
+    color: '#F1DFD5',
+    route: '/baristas' as const,
+  },
+  {
+    title: 'Your coffee moments',
+    subtitle: 'Keep track of your recent orders.',
+    label: 'ORDER HISTORY',
+    icon: 'receipt-outline' as const,
+    color: '#DDE5EF',
+    route: '/orders' as const,
+  },
+];
 
-// export default function TabTwoScreen() {
-//   const safeAreaInsets = useSafeAreaInsets();
-//   const insets = {
-//     ...safeAreaInsets,
-//     bottom: safeAreaInsets.bottom + BottomTabInset + Spacing.three,
-//   };
-//   const theme = useTheme();
+export default function ExploreScreen() {
+  const router = useRouter();
 
-//   const contentPlatformStyle = Platform.select({
-//     android: {
-//       paddingTop: insets.top,
-//       paddingLeft: insets.left,
-//       paddingRight: insets.right,
-//       paddingBottom: insets.bottom,
-//     },
-//     web: {
-//       paddingTop: Spacing.six,
-//       paddingBottom: Spacing.four,
-//     },
-//   });
+  return (
+    <SafeAreaView style={styles.safe}>
+      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <Text style={styles.kicker}>A WORLD OF GOOD COFFEE</Text>
+        <Text style={styles.title}>Take a little look around.</Text>
+        <Text style={styles.subtitle}>
+          Good coffee is more than what’s in your cup. Explore the people, beans, and little rituals that make it special.
+        </Text>
 
-//   return (
-//     <ScrollView
-//       style={[styles.scrollView, { backgroundColor: theme.background }]}
-//       contentInset={insets}
-//       contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}>
-//       <ThemedView style={styles.container}>
-//         <ThemedView style={styles.titleContainer}>
-//           <ThemedText type="subtitle">Explore</ThemedText>
-//           <ThemedText style={styles.centerText} themeColor="textSecondary">
-//             This starter app includes example{'\n'}code to help you get started.
-//           </ThemedText>
+        <Animated.View entering={FadeInDown.springify()} style={styles.feature}>
+          <View style={styles.featureMark}>
+            <Ionicons name="cafe" size={25} color="#FFF8EF" />
+          </View>
+          <Text style={styles.featureEyebrow}>YOUR DAILY RITUAL</Text>
+          <Text style={styles.featureTitle}>A little coffee. A lot of comfort.</Text>
+          <Text style={styles.featureText}>Find your new favorite and make today a little warmer.</Text>
+          <TouchableOpacity
+            style={styles.featureButton}
+            onPress={() => router.push('/menu')}
+            activeOpacity={0.85}
+          >
+            <Text style={styles.featureButtonText}>Explore the menu</Text>
+            <Ionicons name="arrow-forward" size={16} color="#3B261B" />
+          </TouchableOpacity>
+          <View style={styles.decorCircle} />
+          <View style={styles.decorCircleSmall} />
+        </Animated.View>
 
-//           <ExternalLink href="https://docs.expo.dev" asChild>
-//             <Pressable style={({ pressed }) => pressed && styles.pressed}>
-//               <ThemedView type="backgroundElement" style={styles.linkButton}>
-//                 <ThemedText type="link">Expo documentation</ThemedText>
-//                 <SymbolView
-//                   tintColor={theme.text}
-//                   name={{ ios: 'arrow.up.right.square', android: 'link', web: 'link' }}
-//                   size={12}
-//                 />
-//               </ThemedView>
-//             </Pressable>
-//           </ExternalLink>
-//         </ThemedView>
+        <View style={styles.sectionHeader}>
+          <View>
+            <Text style={styles.sectionKicker}>MAKE YOURSELF AT HOME</Text>
+            <Text style={styles.sectionTitle}>Explore Brew & Co.</Text>
+          </View>
+          <Ionicons name="sparkles-outline" size={20} color="#A08063" />
+        </View>
 
-//         <ThemedView style={styles.sectionsWrapper}>
-//           <Collapsible title="File-based routing">
-//             <ThemedText type="small">
-//               This app has two screens: <ThemedText type="code">src/app/index.tsx</ThemedText> and{' '}
-//               <ThemedText type="code">src/app/explore.tsx</ThemedText>
-//             </ThemedText>
-//             <ThemedText type="small">
-//               The layout file in <ThemedText type="code">src/app/_layout.tsx</ThemedText> sets up
-//               the tab navigator.
-//             </ThemedText>
-//             <ExternalLink href="https://docs.expo.dev/router/introduction">
-//               <ThemedText type="linkPrimary">Learn more</ThemedText>
-//             </ExternalLink>
-//           </Collapsible>
+        {destinations.map((item, index) => (
+          <Animated.View
+            key={item.label}
+            entering={FadeInDown.delay(index * 65).springify()}
+            layout={Layout.springify()}
+          >
+            <TouchableOpacity
+              style={styles.destination}
+              onPress={() => router.push(item.route)}
+              activeOpacity={0.78}
+            >
+              <View style={[styles.destinationIcon, { backgroundColor: item.color }]}>
+                <Ionicons name={item.icon} size={23} color="#4A3324" />
+              </View>
+              <View style={styles.destinationCopy}>
+                <Text style={styles.destinationLabel}>{item.label}</Text>
+                <Text style={styles.destinationTitle}>{item.title}</Text>
+                <Text style={styles.destinationSubtitle}>{item.subtitle}</Text>
+              </View>
+              <Ionicons name="arrow-forward-circle-outline" size={23} color="#A58B76" />
+            </TouchableOpacity>
+          </Animated.View>
+        ))}
 
-//           <Collapsible title="Android, iOS, and web support">
-//             <ThemedView type="backgroundElement" style={styles.collapsibleContent}>
-//               <ThemedText type="small">
-//                 You can open this project on Android, iOS, and the web. To open the web version,
-//                 press <ThemedText type="smallBold">w</ThemedText> in the terminal running this
-//                 project.
-//               </ThemedText>
-//               <Image
-//                 source={require('@/assets/images/tutorial-web.png')}
-//                 style={styles.imageTutorial}
-//               />
-//             </ThemedView>
-//           </Collapsible>
+        <View style={styles.footer}>
+          <View style={styles.footerLine} />
+          <Text style={styles.footerText}>GOOD COFFEE. GOOD COMPANY.</Text>
+          <View style={styles.footerLine} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
 
-//           <Collapsible title="Images">
-//             <ThemedText type="small">
-//               For static images, you can use the <ThemedText type="code">@2x</ThemedText> and{' '}
-//               <ThemedText type="code">@3x</ThemedText> suffixes to provide files for different
-//               screen densities.
-//             </ThemedText>
-//             <Image source={require('@/assets/images/react-logo.png')} style={styles.imageReact} />
-//             <ExternalLink href="https://reactnative.dev/docs/images">
-//               <ThemedText type="linkPrimary">Learn more</ThemedText>
-//             </ExternalLink>
-//           </Collapsible>
-
-//           <Collapsible title="Light and dark mode components">
-//             <ThemedText type="small">
-//               This template has light and dark mode support. The{' '}
-//               <ThemedText type="code">useColorScheme()</ThemedText> hook lets you inspect what the
-//               user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-//             </ThemedText>
-//             <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-//               <ThemedText type="linkPrimary">Learn more</ThemedText>
-//             </ExternalLink>
-//           </Collapsible>
-
-//           <Collapsible title="Animations">
-//             <ThemedText type="small">
-//               This template includes an example of an animated component. The{' '}
-//               <ThemedText type="code">src/components/ui/collapsible.tsx</ThemedText> component uses
-//               the powerful <ThemedText type="code">react-native-reanimated</ThemedText> library to
-//               animate opening this hint.
-//             </ThemedText>
-//           </Collapsible>
-//         </ThemedView>
-//         {Platform.OS === 'web' && <WebBadge />}
-//       </ThemedView>
-//     </ScrollView>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   scrollView: {
-//     flex: 1,
-//   },
-//   contentContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'center',
-//   },
-//   container: {
-//     maxWidth: MaxContentWidth,
-//     flexGrow: 1,
-//   },
-//   titleContainer: {
-//     gap: Spacing.three,
-//     alignItems: 'center',
-//     paddingHorizontal: Spacing.four,
-//     paddingVertical: Spacing.six,
-//   },
-//   centerText: {
-//     textAlign: 'center',
-//   },
-//   pressed: {
-//     opacity: 0.7,
-//   },
-//   linkButton: {
-//     flexDirection: 'row',
-//     paddingHorizontal: Spacing.four,
-//     paddingVertical: Spacing.two,
-//     borderRadius: Spacing.five,
-//     justifyContent: 'center',
-//     gap: Spacing.one,
-//     alignItems: 'center',
-//   },
-//   sectionsWrapper: {
-//     gap: Spacing.five,
-//     paddingHorizontal: Spacing.four,
-//     paddingTop: Spacing.three,
-//   },
-//   collapsibleContent: {
-//     alignItems: 'center',
-//   },
-//   imageTutorial: {
-//     width: '100%',
-//     aspectRatio: 296 / 171,
-//     borderRadius: Spacing.three,
-//     marginTop: Spacing.two,
-//   },
-//   imageReact: {
-//     width: 100,
-//     height: 100,
-//     alignSelf: 'center',
-//   },
-// });
+const styles = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: '#F7F3ED' },
+  content: { paddingHorizontal: 22, paddingTop: 20, paddingBottom: 30, maxWidth: 850, width: '100%', alignSelf: 'center' },
+  kicker: { fontSize: 10, fontWeight: '800', letterSpacing: 1.8, color: '#A08063' },
+  title: { fontSize: 30, lineHeight: 36, fontWeight: '900', letterSpacing: -0.8, color: '#35251C', marginTop: 6 },
+  subtitle: { fontSize: 13, lineHeight: 20, color: '#8F7B6A', marginTop: 6 },
+  feature: { position: 'relative', overflow: 'hidden', backgroundColor: '#493326', borderRadius: 22, padding: 21, marginTop: 21 },
+  featureMark: { width: 46, height: 46, borderRadius: 15, backgroundColor: '#76573F', alignItems: 'center', justifyContent: 'center', marginBottom: 17 },
+  featureEyebrow: { fontSize: 9, fontWeight: '800', letterSpacing: 1.7, color: '#DAB68C' },
+  featureTitle: { maxWidth: 280, fontSize: 24, lineHeight: 29, fontWeight: '800', color: '#FFF8EF', marginTop: 7 },
+  featureText: { maxWidth: 290, fontSize: 12, lineHeight: 18, color: '#E0CCB8', marginTop: 8 },
+  featureButton: { alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 11, backgroundColor: '#F4E7D6', borderRadius: 11, paddingHorizontal: 14, paddingVertical: 11, marginTop: 17 },
+  featureButtonText: { color: '#3B261B', fontSize: 12, fontWeight: '800' },
+  decorCircle: { position: 'absolute', width: 150, height: 150, borderRadius: 80, borderWidth: 1, borderColor: 'rgba(255,248,239,0.12)', right: -46, top: 11 },
+  decorCircleSmall: { position: 'absolute', width: 95, height: 95, borderRadius: 50, borderWidth: 1, borderColor: 'rgba(255,248,239,0.12)', right: -18, top: 39 },
+  sectionHeader: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: 28, marginBottom: 13 },
+  sectionKicker: { fontSize: 9, fontWeight: '800', letterSpacing: 1.5, color: '#A08063', marginBottom: 4 },
+  sectionTitle: { fontSize: 21, fontWeight: '800', color: '#34251D' },
+  destination: { flexDirection: 'row', alignItems: 'center', gap: 13, backgroundColor: '#FFFDFC', borderRadius: 17, borderWidth: 1, borderColor: '#EFE6DC', padding: 13, marginBottom: 10 },
+  destinationIcon: { width: 52, height: 55, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
+  destinationCopy: { flex: 1 },
+  destinationLabel: { fontSize: 8, fontWeight: '800', letterSpacing: 1.4, color: '#A08063' },
+  destinationTitle: { fontSize: 13, fontWeight: '800', color: '#39291F', marginTop: 3 },
+  destinationSubtitle: { fontSize: 10, color: '#8F7B6A', marginTop: 3 },
+  footer: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 13 },
+  footerLine: { flex: 1, height: 1, backgroundColor: '#E5D9CD' },
+  footerText: { fontSize: 8, fontWeight: '800', letterSpacing: 1.2, color: '#A08063' },
+});
